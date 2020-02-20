@@ -977,6 +977,23 @@ class VertexDendrogram(Dendrogram):
         return VertexClustering(self._graph, membership,
                 modularity_params=self._modularity_params)
 
+    def get_cut_modularities(self):
+        """Returns the modularity for all possible cuts in the dendrogram.
+
+        @return: a list of tuples, each giving a count and the associated
+        modularity score.
+        """
+        n = self._graph.vcount()
+        qs = []
+        counts = []
+        for step in xrange(min(n-1, len(self._merges))):
+            membs = community_to_membership(self._merges, n, step)
+            qs.append(self._graph.modularity(membs, **self._modularity_params))
+            counts.append(n-step)
+        return tuple(
+                zip(*sorted(zip(counts, qs), key=lambda x: x[1], reverse=True))
+                )
+
     @property
     def optimal_count(self):
         """Returns the optimal number of clusters for this dendrogram.
