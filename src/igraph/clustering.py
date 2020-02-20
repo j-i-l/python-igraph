@@ -980,8 +980,7 @@ class VertexDendrogram(Dendrogram):
     def get_cut_modularities(self):
         """Returns the modularity for all possible cuts in the dendrogram.
 
-        @return: a list of tuples, each giving a count and the associated
-        modularity score.
+        @return: cluster counts and the associated modularity scores as a tuple.
         """
         n = self._graph.vcount()
         qs = []
